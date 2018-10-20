@@ -19,16 +19,16 @@ msg.OK = `${msg.prefix} Completed ride OK`
 msg.KO = `${msg.prefix} Completed ride FAIL` 
 
 const loyalty_details = {
-  0: {status: 'bronze', bonus: 1},
-  20: {status: 'silver', bonus: 3},
-  50: {status: 'gold', bonus: 5},
+  0:   {status: 'bronze', bonus: 1},
+  20:  {status: 'silver', bonus: 3},
+  50:  {status: 'gold', bonus: 5},
   100: {status: 'platinum', bonus: 10}
 }
 
-function getLoyaltyDetails(rideCount){
+const getLoyaltyDetails = rideCount => {
   return Object.keys(loyalty_details).sort((a, b) => a - b).reduce(
       (status_max, key) => {
-          if(rideCount >= key){
+          if(rideCount >= parseInt(key)){
             status_max = loyalty_details[key]
           }
           return status_max      
@@ -52,13 +52,11 @@ async function rideCompletedEvent(message, messageFields) {
     const loyaltyDetails = getLoyaltyDetails(updatedRideCount)
     const updatedStatus = loyaltyDetails.status
     const updatedLoyaltyPoints = (rider.loyalty_points + Math.floor(amount) * loyaltyDetails.bonus)
-    
     const update_fields = {
       "status": updatedStatus,
       "ride_count": updatedRideCount,
       "loyalty_points": updatedLoyaltyPoints
     }
-
     await riderModel.updateOne(riderId, update_fields)
     logger.info(update_fields, msg.OK );
 
