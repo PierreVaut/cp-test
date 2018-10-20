@@ -20,17 +20,20 @@ async function handleSignupEvent(message, messageFields) {
     '[worker.handleSignupEvent] Received user signup event',
   );
 
-  // TODO handle idempotency
-
   try {
-    logger.info(
-      { rider_id: riderId, name },
-      '[worker.handleSignupEvent] Insert rider',
-    );
-    await riderModel.insertOne({
-      _id: riderId,
-      name,
-    });
+
+    const response = await riderModel.upsertOne({_id: riderId, name});
+
+    if(response){
+      logger.info(
+        { rider_id: riderId, name },
+        '[worker.handleSignupEvent] Insert rider OK' + response);
+    } else {
+      logger.error(
+        { rider_id: riderId, name },
+        '[worker.handleSignupEvent] Insert rider FAIL');
+    }
+
   } catch (err) {
     handleMessageError(err, message, messageFields);
   }

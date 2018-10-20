@@ -199,7 +199,6 @@ async function riderPhoneUpdate(rider) {
     id: rider.id,
     phoneNumber: `+336${Math.random().toString().slice(2,11)}`
   }
-  console.log("RiderPhoneUpdate", phoneUpdate)
   await publish({
     type: 'rider_updated_phone_number',
     payload: phoneUpdate

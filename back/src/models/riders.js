@@ -13,6 +13,9 @@ const riderSchema = Joi.object({
   status: Joi.valid(loyaltyStatuses).default('bronze'),
   phoneNumber: Joi.string().min(10),
   created_at: Joi.date().default(() => dateLib.getDate(), 'time of creation'),
+  ride_count: Joi.number().integer().min(0).default(0),
+  loyalty_points: Joi.number().integer().min(0).default(0)
+
 });
 
 /**
@@ -83,6 +86,24 @@ async function insertOne(rider) {
 }
 
 /**
+ * Insert/update a new rider into the database
+ *
+ * @param {Object} rider - data about the inserted rider
+ *
+ * @returns {Object} the inserted rider
+ */
+async function upsertOne(rider) {
+  const validatedRider = _validateSchema(rider);
+  const res = await collection().updateOne(
+    {_id: validatedRider._id},
+    {$set: validatedRider},
+    {upsert: true});
+
+  return res;
+}
+
+
+/**
  * Update a rider
  *
  * @param {ObjectId} riderId     - identifier of the updated rider
@@ -105,4 +126,5 @@ module.exports = {
   find,
   insertOne,
   updateOne,
+  upsertOne
 };
