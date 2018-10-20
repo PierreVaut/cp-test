@@ -194,12 +194,15 @@ async function riderSignup(name) {
  */
 async function riderPhoneUpdate(rider) {
   // Message publication...
+  
+  const phoneUpdate = {
+    id: rider.id,
+    phoneNumber: `+336${Math.random().toString().slice(2,11)}`
+  }
+  console.log("RiderPhoneUpdate", phoneUpdate)
   await publish({
     type: 'rider_updated_phone_number',
-    payload: {
-      ..._.pick(rider, 'id'),
-      phone_number: `+336${Math.random().toString().slice(2,11)}`
-    }
+    payload: phoneUpdate
   });
 }
 

@@ -12,6 +12,15 @@ const signupSchema = Joi.object({
   }),
 });
 
+const phoneUpdateSchema = Joi.object({
+  type: Joi.string().required(),
+  payload: Joi.object({
+    id: Joi.objectId().required(),
+    phoneNumber: Joi.string().min(10)
+  }),
+})
+
 module.exports = {
   signupSchema,
+  phoneUpdateSchema
 };
