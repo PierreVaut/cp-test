@@ -20,26 +20,25 @@ msg.OK = `${msg.prefix} Phone update OK`
 msg.KO =  `${msg.prefix} Phone update FAIL (UnexistingUser Error)`
 
 async function handlePhoneUpdateEvent(message, messageFields) {
-  const { id: riderId, phoneNumber } = message.payload;
+  const { id: riderId, phone_number } = message.payload;
   logger.info(
-    { rider_id: riderId, phoneNumber },
+    { rider_id: riderId, phone_number },
     msg.starting,
   );
 
   try {
       const response = await riderModel.updateOne(
-        {_id: riderId},
-        {$set: {phoneNumber: phoneNumber}}
+       riderId, {phone_number: phone_number}
         );
         if (response.result.nModified == 0){
           logger.error(
-            {rider_id: riderId, phoneNumber},msg.KO)
+            {rider_id: riderId, phone_number},msg.KO)
           } else{
             logger.info(
-              {rider_id: riderId, phoneNumber}, msg.OK)
+              {rider_id: riderId, phone_number}, msg.OK)
         }
     } catch (err) {
-      handleMessageError(err, message, messageFields);
+      logger.error({ rider_id: riderId, phone_number }, msg.KO)
     }
   }
 

@@ -16,35 +16,19 @@ const riderModel = require('../../../models/riders');
 
 const msg = {prefix: "[worker.RideCreateEvent] :"}
 msg.starting = `${msg.prefix} Received create ride event`
-msg.OK = `${msg.prefix} Create ride OK`
-msg.KO =  `${msg.prefix} Create ride FAIL`
+// msg.OK = `${msg.prefix} Create ride OK`
+// msg.KO = `${msg.prefix} Create ride FAIL`
 
 async function RideCreateEvent(message, messageFields) {
-  const { id: rideId, rider_id: riderId, amount } = message.payload;
-  logger.info(
-    { rider_id: riderId, rideId, amount },
-    msg.starting,
-  );
+  // const { id: rideId, rider_id: riderId, amount } = message.payload;
+  // logger.info(
+  //   { rider_id: riderId, rideId, amount },
+  //   msg.starting,
+  // );
 
-  // try {
-  //   const response = await riderModel.updateOne(
-  //     {_id: riderId},
-  //     {$set: {phoneNumber: phoneNumber}}
-  //     );
-  //   if (response.result.nModified == 0){
-  //      logger.error(
-  //       { rider_id: riderId, phoneNumber },
-  //       `[worker.RideCreateEvent] Phone update FAIL (UnexistingUser Error)`,
-  //     )
-  //   } else{
-  //     logger.info(
-  //        { rider_id: riderId, phoneNumber },
-  //        `[worker.RideCreateEvent] Phone update OK`,
-  //      );
-  //   }
-  //   } catch (err) {
-  //   handleMessageError(err, message, messageFields);
-  // }
+  // We put all the loyalty logic in rideCompleteEvent handler
+  // TODO: we should check if a complete ride was duely created before the ride is completed
+
 }
 
 module.exports = RideCreateEvent;

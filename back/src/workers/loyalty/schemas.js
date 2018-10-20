@@ -16,7 +16,7 @@ const phoneUpdateSchema = Joi.object({
   type: Joi.string().required(),
   payload: Joi.object({
     id: Joi.objectId().required(),
-    phoneNumber: Joi.string().min(10).required()
+    phone_number: Joi.string().min(10).required()
   }),
 })
 
@@ -32,7 +32,7 @@ const rideCreateSchema = Joi.object({
 const rideCompleteSchema = Joi.object({
   type: Joi.string().required(),
   payload: Joi.object({
-    id: Joi.objectId().required(),
+    id: Joi.string().required(),
     amount: Joi.number().min(0).max(9999),
     rider_id: Joi.string().required()
   }),

@@ -4,6 +4,7 @@ const { loyaltyStatuses } = require('../constants/loyalty');
 const { getDb } = require('../lib/mongodb');
 const dateLib = require('../lib/date');
 const Joi = require('../lib/joi');
+const { ObjectID } = require('mongodb');
 
 const COLLECTION_NAME = 'riders';
 
@@ -11,7 +12,7 @@ const riderSchema = Joi.object({
   _id: Joi.objectId().required(),
   name: Joi.string().min(6),
   status: Joi.valid(loyaltyStatuses).default('bronze'),
-  phoneNumber: Joi.string().min(10),
+  phone_number: Joi.string().min(10).default(''),
   created_at: Joi.date().default(() => dateLib.getDate(), 'time of creation'),
   ride_count: Joi.number().integer().min(0).default(0),
   loyalty_points: Joi.number().integer().min(0).default(0)
@@ -68,14 +69,13 @@ function find(query = {}, projections = {}) {
  * @returns {Object} The mongo document
  */
 function findOneById(riderId, projections = {}) {
-  return collection().findOne({ _id: riderId }, projections);
+  return collection().findOne({ _id: ObjectID(riderId) }, projections)
 }
 
 /**
  * Insert a new rider into the database
  *
  * @param {Object} rider - data about the inserted rider
- *
  * @returns {Object} the inserted rider
  */
 async function insertOne(rider) {
@@ -89,13 +89,12 @@ async function insertOne(rider) {
  * Insert/update a new rider into the database
  *
  * @param {Object} rider - data about the inserted rider
- *
  * @returns {Object} the inserted rider
  */
 async function upsertOne(rider) {
   const validatedRider = _validateSchema(rider);
   const res = await collection().updateOne(
-    {_id: validatedRider._id},
+    {_id: ObjectID(validatedRider._id)},
     {$set: validatedRider},
     {upsert: true});
 
@@ -108,12 +107,11 @@ async function upsertOne(rider) {
  *
  * @param {ObjectId} riderId     - identifier of the updated rider
  * @param {Object} updatedFields - fields that are updated
- *
  * @returns {Object/null} result of update if succeeded, null otherwise
  */
 async function updateOne(riderId, updatedFields) {
   const result = await collection().updateOne(
-    { _id: riderId },
+    { _id: ObjectID(riderId) },
     { $set: updatedFields },
   );
   return result;

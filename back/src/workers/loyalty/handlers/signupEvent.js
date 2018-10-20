@@ -16,21 +16,21 @@ async function handleSignupEvent(message, messageFields) {
   const { id: riderId, name } = message.payload;
 
   logger.info(
-    { rider_id: riderId, name },
+    { rider_id: riderId, name:name },
     '[worker.handleSignupEvent] Received user signup event',
   );
 
   try {
 
-    const response = await riderModel.upsertOne({_id: riderId, name});
+    const response = await riderModel.upsertOne({_id: riderId, name:name});
 
     if(response){
       logger.info(
-        { rider_id: riderId, name },
-        '[worker.handleSignupEvent] Insert rider OK' + response);
+        { rider_id: riderId, name:name },
+        '[worker.handleSignupEvent] Insert rider OK');
     } else {
       logger.error(
-        { rider_id: riderId, name },
+        { rider_id: riderId, name:name },
         '[worker.handleSignupEvent] Insert rider FAIL');
     }
 
