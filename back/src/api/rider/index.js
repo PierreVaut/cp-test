@@ -7,6 +7,7 @@ const controller = require('./controller');
 
 const router = express.Router();
 
+router.get('/loyalty/top-users', wrap(controller.getLoyaltyTopUsers));
 router.get('/loyalty/:rider_id', wrap(controller.getLoyaltyInfo));
 
 module.exports = router;

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import request from 'superagent';
+import {LoyaltyIcon, LoyaltyProgressBar} from './common'
 
 const urlForRider = (id) =>
   `http://localhost:8000/api/rider/loyalty/${id}`;
@@ -7,23 +8,25 @@ const urlForRider = (id) =>
 class Rider extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      id: this.props.match.params.id
+    };
   }
-
+  
   async componentDidMount() {
     request
-      .get(urlForRider(this.props.id))
-      .then(res => {
-        this.setState({
-          rider: res.body
-        });
-      }, (err) => {
-        this.setState({
-          error: err.toString()
-        });
+    .get(urlForRider(this.state.id))
+    .then(res => {
+      this.setState({
+        rider: res.body
       });
+    }, (err) => {
+      this.setState({
+        error: err.toString()
+      });
+    });
   }
-
+  
   render() {
     if (this.state.error) {
       return <p>{this.state.error}</p>;
@@ -31,11 +34,15 @@ class Rider extends Component {
     if (!this.state.rider) {
       return <p>Loading...</p>;
     }
+    const { name, id, status, loyalty_points, ride_count} = this.state.rider
     return (
       <div>
-        <p>Id: {this.state.rider._id}</p>
-        <p>Name: {this.state.rider.name}</p>
-        <p>Loyalty Status: {this.state.rider.status}</p>
+        <h2>Bienvenue {name || "invité"}</h2>
+        <p>Votre statut: {status}</p>
+        <LoyaltyIcon status={status} />
+        <p>Vos points de fidélité: {loyalty_points} (<a href="https://www.chauffeur-prive.com/fr/fidelite.html">convertibles en couses gratuites</a>)</p>
+        <p>Courses effectuées: {ride_count}</p>
+        <LoyaltyProgressBar rideCount= {ride_count} status={status} />
       </div>
     );
   }

@@ -45,6 +45,25 @@ async function getLoyaltyInfo(req, res) {
   return res.send(rider);
 }
 
+async function getLoyaltyTopUsers(req, res){
+  
+  console.log("getLoyaltyTopUsers")
+  const limit = 10
+  
+  logger.info({},`[loyalty#getLoyaltyInfo] Top ${limit} users requested`);
+  const topUsers = await riders.find().sort({"ride_count": -1}).limit(limit).toArray();
+  if (!topUsers) {
+    logger.info(
+      { },
+      '[loyalty#getLoyaltyInfo] topUsers server error',
+    );
+    return res.sendStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+
+  return res.send(topUsers);
+}
+
 module.exports = {
   getLoyaltyInfo,
+  getLoyaltyTopUsers
 };
