@@ -33,7 +33,7 @@ async function getLoyaltyInfo(req, res) {
     '[loyalty#getLoyaltyInfo] Rider info requested',
   );
 
-  const rider = await riders.findOneById(riderId, { name: 1, status: 1 });
+  const rider = await riders.findOneById(riderId, { name: 1, status: 1, ride_count: 1, loyalty_points: 1 });
   if (!rider) {
     logger.info(
       { rider_id: riderId },

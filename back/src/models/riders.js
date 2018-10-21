@@ -16,7 +16,6 @@ const riderSchema = Joi.object({
   created_at: Joi.date().default(() => dateLib.getDate(), 'time of creation'),
   ride_count: Joi.number().integer().min(0).default(0),
   loyalty_points: Joi.number().integer().min(0).default(0)
-
 });
 
 /**
