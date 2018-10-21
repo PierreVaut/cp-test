@@ -42,16 +42,16 @@ const EVENTS = {
 };
 const ERRORS = {
   wrong_schema: {
-    probability: 0.0005
+    probability: 0.05
   },
   wrong_value: {
-    probability: 0.0005
+    probability: 0.05
   },
   missing_publication: {
-    probability: 0.0005
+    probability: 0.05
   },
   multiple_publication: {
-    probability: 0.0001
+    probability: 0.1
   }
 };
 const SPECIAL_RIDERS = {
@@ -196,7 +196,7 @@ async function riderPhoneUpdate(rider) {
   // Message publication...
   
   const phoneUpdate = {
-    id: rider.id,
+    ..._.pick(rider, 'id'),
     phone_number: `+336${Math.random().toString().slice(2,11)}`
   }
   await publish({
